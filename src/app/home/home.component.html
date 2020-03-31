@@ -1,0 +1,17 @@
+<main>
+	<div class="message">
+		<div class="centered">
+			<h1>CKEditor track changes "load and save" integration for Angular</h1>
+		</div>
+	</div>
+	<div class="centered">
+		<div class='row row-editor'>
+			<ckeditor [editor]="Editor" (ready)="onReady($event)" [config]="editorConfig" [data]="data"></ckeditor>
+			<div #sidebar class='sidebar'></div>
+		</div>
+		<div class="row row-info">
+			See the editor data in the console.
+			<button class="get-data" (click)="showEditorDataInConsole($event)">Get editor data</button>
+		</div>
+	</div>
+</main>
