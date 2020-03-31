@@ -5,15 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { EditorComponent } from './editor/editor.component';
 import { HeaderComponent } from './header/header.component';
 import { ErrorComponent } from './error/error.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    EditorComponent,
+    HomeComponent,
     HeaderComponent,
     ErrorComponent
   ],
