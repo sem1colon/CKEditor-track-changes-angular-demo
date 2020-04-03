@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    event.preventDefault()
     this.authService.loginUser(this.loginForm.value).subscribe(
       data => {
         this.authService.login();

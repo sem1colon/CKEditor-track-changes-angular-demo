@@ -7,9 +7,6 @@ import { AuthService } from './auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  loginSatus: boolean;
-  constructor(private authService: AuthService){}
   ngOnInit(): void {
-    this.loginSatus = this.authService.isAuthenticated();
   }
 }

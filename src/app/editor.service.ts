@@ -7,11 +7,13 @@ import { CKEditor5 } from '@ckeditor/ckeditor5-angular';
 })
 export class EditorService {
 
+	// currentUser = this.authService.getCurrentUser();
+
 	constructor(private authService: AuthService) { }
 	getAppData() {
 		return {
 			// The ID of the current user.
-			userId: this.authService.getCurrentUser(),
+			userId: this.authService.currentUser.id,
 			// Users data.
 			users: this.authService.users,
 			// Suggestion threads data.
@@ -176,7 +178,6 @@ export class EditorService {
       }
   
       public init() {
-        debugger
         const usersPlugin = this.editor.plugins.get( 'Users' );
         const trackChangesPlugin = this.editor.plugins.get( 'TrackChanges' );
         const commentsRepositoryPlugin = this.editor.plugins.get( 'CommentsRepository' );

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError} from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +7,7 @@ import { Observable, of, throwError} from 'rxjs';
 export class AuthService {
 
   loginStatus: boolean;
-  currentUser={};
+  currentUser: any;
   users = [
     {
       id: 'user-1',
@@ -26,17 +26,17 @@ export class AuthService {
   constructor() { }
 
   loginUser(loginDetails: any): Observable<any> {
-    if(this.validateUser(loginDetails)){
+    if (this.validateUser(loginDetails)) {
       return of(this.currentUser);
-    }else{
+    } else {
       return throwError("Invalid Credentials!");
     }
   }
 
-  validateUser(loginDetails){
-    for(let user of this.users){
-      if(user.id === loginDetails.id){
-        if(user.password === loginDetails.password){
+  validateUser(loginDetails) {
+    for (let user of this.users) {
+      if (user.id === loginDetails.id) {
+        if (user.password === loginDetails.password) {
           this.currentUser = user;
           return true;
         }
@@ -56,7 +56,7 @@ export class AuthService {
     return this.loginStatus;
   }
 
-  getCurrentUser(){
+  getCurrentUser() {
     return this.currentUser;
   }
 }

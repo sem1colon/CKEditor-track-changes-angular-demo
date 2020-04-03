@@ -1,0 +1,16 @@
+{
+    "users" : [
+        {
+          "id": "user-1",
+          "name": "Soham",
+          "password": "admin",
+          "avatar": "https://randomuser.me/api/portraits/thumb/men/26.jpg"
+        },
+        {
+          "id": "user-2",
+          "name": "Elsa",
+          "password": "user",
+          "avatar": "https://randomuser.me/api/portraits/thumb/women/65.jpg"
+        }
+      ]
+}

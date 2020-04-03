@@ -1,1 +1,17 @@
-<p>header works!</p>
+<header   *ngIf="authService.loginStatus">
+	<div class="centered">
+		<h1>
+			<a [routerLink]="['/home']" rel="noopener noreferrer">
+				<img src="https://c.cksource.com/a/1/logos/ckeditor5.svg" alt="CKEditor 5 logo" />CKEditor
+			</a>
+		</h1>
+
+		<nav>
+			<ul>
+				<li>
+					<a class= "logout" (click) = "logout()" rel="noopener noreferrer">{{ authService.getCurrentUser().name }}</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</header>
