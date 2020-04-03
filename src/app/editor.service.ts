@@ -1,92 +1,32 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
 import { CKEditor5 } from '@ckeditor/ckeditor5-angular';
+
+import { AuthService } from './auth.service';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class EditorService {
 
-	// currentUser = this.authService.getCurrentUser();
+	currentUser = this.authService.currentUser;
 
-	constructor(private authService: AuthService) { }
+	private readonly serviceEndPoint: string = 'http://localhost:3000/';
+
+	constructor(private authService: AuthService, private http: HttpClient) { }
 	getAppData() {
 		return {
 			// The ID of the current user.
-			userId: this.authService.currentUser.id,
+			userId: this.currentUser.id,
 			// Users data.
 			users: this.authService.users,
 			// Suggestion threads data.
-			suggestions: [
-				{
-					id: 'suggestion-1',
-					type: 'insertion',
-					authorId: 'user-2',
-					createdAt: new Date(2019, 1, 13, 11, 20, 48)
-				},
-				{
-					id: 'suggestion-2',
-					type: 'deletion',
-					authorId: 'user-1',
-					createdAt: new Date(2019, 1, 14, 12, 7, 20)
-				},
-				{
-					id: 'suggestion-3',
-					type: 'insertion',
-					authorId: 'user-1',
-					createdAt: new Date(2019, 1, 14, 12, 7, 20)
-				},
-				{
-					id: 'suggestion-4',
-					type: 'deletion',
-					authorId: 'user-1',
-					createdAt: new Date(2019, 1, 15, 8, 44, 1)
-				},
-				{
-					id: 'suggestion-5',
-					type: 'formatInline:886cqig6g8rf',
-					authorId: 'user-2',
-					createdAt: new Date(2019, 2, 8, 10, 2, 7),
-					data: {
-						commandName: 'bold',
-						commandParams: [{ forceValue: true }]
-					}
-				},
-				{
-					id: 'suggestion-6',
-					type: 'formatBlock:698dn3otqzd6',
-					authorId: 'user-2',
-					createdAt: new Date(2019, 2, 8, 10, 2, 10),
-					data: {
-						commandName: 'heading',
-						commandParams: [{ value: 'heading2' }],
-						ormatGroupId: 'blockName',
-						multipleBlocks: false
-					}
-				}
-			],
+			suggestions: this.getSuggestions(),
 			// Comment threads data.
-			commentThreads: [
-				{
-					threadId: 'suggestion-1',
-					comments: [
-						{
-							commentId: 'comment-1',
-							authorId: 'user-1',
-							content: '<p>Are you sure it will fit here?</p>',
-							createdAt: new Date('09/20/2018 14:21:53')
-						},
-						{
-							commentId: 'comment-2',
-							authorId: 'user-2',
-							content: '<p>I think so...</p>',
-							createdAt: new Date('09/21/2018 08:17:01')
-						}
-					]
-				}
-			]
+			commentThreads: this.getCommentsThread()
 		}
-	};
+	}
+
 	getInitialData() {
 		return `
 	<h2>
@@ -169,39 +109,117 @@ export class EditorService {
 			substantially and the language a person speaks is an essential element of daily life.
 		</p>
 	`;
-  } 
-  getLoadSaveIntegration( appData ) {
-    return class LoadSaveIntegration {
-      public editor: CKEditor5.Editor;
-      public constructor( editor: CKEditor5.Editor ) {
-        this.editor = editor;
-      }
-  
-      public init() {
-        const usersPlugin = this.editor.plugins.get( 'Users' );
-        const trackChangesPlugin = this.editor.plugins.get( 'TrackChanges' );
-        const commentsRepositoryPlugin = this.editor.plugins.get( 'CommentsRepository' );
-  
-        // Load the users data.
-        for ( const user of appData.users ) {
-          usersPlugin.addUser( user );
-        }
-  
-        // Set the current user.
-        usersPlugin.defineMe( appData.userId );
-  
-        // Load the suggestion threads data.
-        for ( const suggestion of appData.suggestions ) {
-          trackChangesPlugin.addSuggestion( suggestion );
-        }
-  
-        // Load the comment threads data.
-        for ( const commentThread of appData.commentThreads ) {
-          commentThread.isFromAdapter = true;
-  
-          commentsRepositoryPlugin.addCommentThread( commentThread );
-        }
-      }
-    };
-  } 
+	}
+
+	getLoadSaveIntegration(appData) {
+		return class LoadSaveIntegration {
+			public editor: CKEditor5.Editor;
+			public constructor(editor: CKEditor5.Editor) {
+				this.editor = editor;
+			}
+
+			public init() {
+				const usersPlugin = this.editor.plugins.get('Users');
+				const trackChangesPlugin = this.editor.plugins.get('TrackChanges');
+				const commentsRepositoryPlugin = this.editor.plugins.get('CommentsRepository');
+
+				// Load the users data.
+				for (const user of appData.users) {
+					usersPlugin.addUser(user);
+				}
+
+				// Set the current user.
+				usersPlugin.defineMe(appData.userId);
+
+				// Load the suggestion threads data.
+				for (const suggestion of appData.suggestions) {
+					trackChangesPlugin.addSuggestion(suggestion);
+				}
+
+				// Load the comment threads data.
+				for (const commentThread of appData.commentThreads) {
+					commentThread.isFromAdapter = true;
+
+					commentsRepositoryPlugin.addCommentThread(commentThread);
+				}
+			}
+		};
+	}
+
+	getSuggestions() {
+		return [
+			{
+				id: 'suggestion-1',
+				type: 'insertion',
+				authorId: 'user-2',
+				createdAt: new Date(2019, 1, 13, 11, 20, 48)
+			},
+			{
+				id: 'suggestion-2',
+				type: 'deletion',
+				authorId: 'user-1',
+				createdAt: new Date(2019, 1, 14, 12, 7, 20)
+			},
+			{
+				id: 'suggestion-3',
+				type: 'insertion',
+				authorId: 'user-1',
+				createdAt: new Date(2019, 1, 14, 12, 7, 20)
+			},
+			{
+				id: 'suggestion-4',
+				type: 'deletion',
+				authorId: 'user-1',
+				createdAt: new Date(2019, 1, 15, 8, 44, 1)
+			},
+			{
+				id: 'suggestion-5',
+				type: 'formatInline:886cqig6g8rf',
+				authorId: 'user-2',
+				createdAt: new Date(2019, 2, 8, 10, 2, 7),
+				data: {
+					commandName: 'bold',
+					commandParams: [{ forceValue: true }]
+				}
+			},
+			{
+				id: 'suggestion-6',
+				type: 'formatBlock:698dn3otqzd6',
+				authorId: 'user-2',
+				createdAt: new Date(2019, 2, 8, 10, 2, 10),
+				data: {
+					commandName: 'heading',
+					commandParams: [{ value: 'heading2' }],
+					ormatGroupId: 'blockName',
+					multipleBlocks: false
+				}
+			}
+		]
+	}
+
+	getCommentsThread() {
+		return [
+			{
+				threadId: 'suggestion-1',
+				comments: [
+					{
+						commentId: 'comment-1',
+						authorId: 'user-1',
+						content: '<p>Are you sure it will fit here?</p>',
+						createdAt: new Date('09/20/2018 14:21:53')
+					},
+					{
+						commentId: 'comment-2',
+						authorId: 'user-2',
+						content: '<p>I think so...</p>',
+						createdAt: new Date('09/21/2018 08:17:01')
+					}
+				]
+			}
+		]
+	}
+
+	saveData(editorData: any) {
+		this.http.post(this.serviceEndPoint+'editorData', editorData)
+	}
 }

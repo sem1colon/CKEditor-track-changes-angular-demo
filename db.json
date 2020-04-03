@@ -12,5 +12,7 @@
           "password": "user",
           "avatar": "https://randomuser.me/api/portraits/thumb/women/65.jpg"
         }
-      ]
+      ],
+      "editorData" : {
+      }
 }

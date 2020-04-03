@@ -125,4 +125,8 @@ export class HomeComponent implements OnInit {
 			annotations.switchTo('wideSidebar');
 		}
 	}
+	public saveEditorData(evt){
+		const editorData = this.editor.data?.get();
+		this.editorService.saveData(editorData);
+	}
 }

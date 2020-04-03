@@ -52,7 +52,8 @@ main .ck.ck-editor {
   align-items: center;
 }
 
-button.get-data {
+button.get-data,
+button.save-editor-data {
   background: #fff;
   font-size: 14px;
   font-weight: bold;
@@ -63,7 +64,9 @@ button.get-data {
   cursor: pointer;
   transition: 200ms ease background;
 }
-button.get-data:hover {
+
+button.get-data:hover,
+button.save-editor-data:hover {
   background: hsl(0, 0%, 90%);
 }
 
