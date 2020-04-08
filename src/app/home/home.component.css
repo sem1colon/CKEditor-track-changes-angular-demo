@@ -7,7 +7,7 @@
 .row-editor > ckeditor > div:first-child,
 .row-editor > ckeditor {
   background: #fff;
-  width: 100%;
+  width: 76%;
   min-height: var(--ck-sample-editor-min-height);
 }
 
@@ -81,7 +81,7 @@ button.save-editor-data:hover {
   border-top: 0;
   overflow: hidden;
   min-height: 100%;
-
+  float: right;
   /* #2733. Do not overlap the left border if the sidebar is longer than content. */
   box-shadow: -1px 0 0 0 hsl(0, 0%, 77%);
 }

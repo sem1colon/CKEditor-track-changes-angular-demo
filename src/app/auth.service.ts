@@ -1,48 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  loginStatus: boolean;
-  currentUser: any;
-  users = [
-    {
-      id: 'user-1',
-      name: 'Soham',
-      password: 'admin',
-      avatar: 'https://randomuser.me/api/portraits/thumb/men/26.jpg'
-    },
-    {
-      id: 'user-2',
-      name: 'Elsa',
-      password: 'user',
-      avatar: 'https://randomuser.me/api/portraits/thumb/women/65.jpg'
-    }
-  ];
+  constructor(private httpClient: HttpClient) { }
 
-  constructor() { }
+  private _loginStatus: boolean = false;
 
-  loginUser(loginDetails: any): Observable<any> {
-    if (this.validateUser(loginDetails)) {
-      return of(this.currentUser);
-    } else {
-      return throwError("Invalid Credentials!");
-    }
-  }
 
-  validateUser(loginDetails) {
-    for (let user of this.users) {
-      if (user.id === loginDetails.id) {
-        if (user.password === loginDetails.password) {
-          this.currentUser = user;
-          return true;
-        }
-      }
-    };
-    return false;
+  getUsers(): Observable<any> {
+    return this.httpClient.get('http://localhost:3000/users');
   }
 
   login() {
@@ -52,11 +23,13 @@ export class AuthService {
   logout() {
     this.loginStatus = false;
   }
-  public isAuthenticated(): boolean {
-    return this.loginStatus;
+
+  set loginStatus(status: boolean) {
+    this._loginStatus = status;
   }
 
-  getCurrentUser() {
-    return this.currentUser;
+  public isAuthenticated(): boolean {
+    return this._loginStatus;
   }
+
 }

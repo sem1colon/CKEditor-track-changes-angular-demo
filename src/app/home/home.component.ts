@@ -2,6 +2,9 @@ import { Component, OnInit, EventEmitter, ElementRef, ViewChild, Output } from '
 import { CKEditor5 } from '@ckeditor/ckeditor5-angular';
 import * as ClassicEditor from '../../assets/ckeditor.js';
 import { EditorService } from '../editor.service'
+import { SharedService } from '../shared.service.js';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
 	selector: 'app-home',
@@ -22,11 +25,9 @@ export class HomeComponent implements OnInit {
 
 	public editor?: CKEditor5.Editor;
 
-	public data = this.editorService.getInitialData();
+	public data: any;
 
-	constructor(private editorService: EditorService) { }
-
-	private appData = this.editorService.getAppData();
+	private appData: any;
 
 	private sidebar = document.createElement('div');
 
@@ -34,19 +35,45 @@ export class HomeComponent implements OnInit {
 
 	private boundCheckPendingActions = this.checkPendingActions.bind(this);
 
-	public get editorConfig() {
-		return {
-			extraPlugins: [
-				this.editorService.getLoadSaveIntegration(this.appData)
-			],
-			sidebar: {
-				container: this.sidebar,
-			},
-			licenseKey: this.licenseKey
-		};
+	public editorConfig: any;
+
+	public currentUser;
+
+	constructor(
+		private editorService: EditorService,
+		private sharedService: SharedService
+	) {
+		this.currentUser = this.sharedService.currentUser;
 	}
 
 	ngOnInit(): void {
+		this.editorService.getInitialData().subscribe(
+			(response) => {
+				this.data = response;
+			}
+		);
+
+		// forkJoin({
+		// 	userId: this.currentUser,
+		// 	users: this.sharedService.users,
+		// 	suggestions: this.editorService.getSuggestions(),
+		// 	commentThreads: this.editorService.getCommentThreads(),
+		// }).subscribe(data => {
+
+		// 	this.appData = data;
+
+		// 	console.log('appData', this.appData);
+
+		// 	this.editorConfig = {
+		// 		extraPlugins: [
+		// 			this.editorService.getLoadSaveIntegration(this.appData)
+		// 		],
+		// 		sidebar: {
+		// 			container: this.sidebar,
+		// 		},
+		// 		licenseKey: this.licenseKey
+		// 	}
+		// });
 	}
 
 	public ngAfterViewInit() {
@@ -125,8 +152,16 @@ export class HomeComponent implements OnInit {
 			annotations.switchTo('wideSidebar');
 		}
 	}
-	public saveEditorData(evt){
+
+	public saveEditorData(evt) {
 		const editorData = this.editor.data?.get();
-		this.editorService.saveData(editorData);
+		this.editorService.saveData(editorData)
+			.subscribe(
+				() => {
+					console.log('Editor data saved!');
+					alert('Data saved successfully!')
+				}
+			);
+		evt.preventDefault();
 	}
 }

@@ -6,7 +6,7 @@
 	</div>
 	<div class="centered">
 		<div class='row row-editor'>
-			<ckeditor [editor]="Editor" (ready)="onReady($event)" [config]="editorConfig" [data]="data"></ckeditor>
+			<ckeditor *ngIf="data && editorConfig" [editor]="Editor" (ready)="onReady($event)" [config]="editorConfig" [data]="data.data"></ckeditor>
 			<div #sidebar class='sidebar'></div>
 		</div>
 		<div class="row row-info">
@@ -19,3 +19,13 @@
 		</div>
 	</div>
 </main>
+<footer>
+	<div class="centered">
+		<p>
+			<a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener noreferrer">CKEditor 5</a> – Rich text editor of tomorrow, available today
+		</p>
+		<p>
+			Copyright © 2020, <a href="https://sem1colon.github.io/" target="_blank" rel="noopener noreferrer">{{currentUser}} Inc.</a> – Vamsi Kaza. All rights reserved.
+		</p>
+	</div>
+</footer>

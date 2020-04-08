@@ -1,4 +1,4 @@
-<header   *ngIf="authService.loginStatus">
+<header *ngIf="this.authService.isAuthenticated()">
 	<div class="centered">
 		<h1>
 			<a [routerLink]="['/home']" rel="noopener noreferrer">
@@ -9,7 +9,8 @@
 		<nav>
 			<ul>
 				<li>
-					<a class= "logout" (click) = "logout()" rel="noopener noreferrer">{{ authService.getCurrentUser().name }}</a>
+					<a class="logout" (click)="logout()"
+						rel="noopener noreferrer">{{ this.sharedService.currentUser.name }}</a>
 				</li>
 			</ul>
 		</nav>
